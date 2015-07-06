@@ -1,4 +1,5 @@
 var pg = require('pg');
+var jsSHA = require("jssha");
 
 require('dotenv').load();
 
