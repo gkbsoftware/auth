@@ -31,6 +31,11 @@ module.exports = {
         throw(err);
       }
 
+      var shaObj = new jsSHA("SHA-1", "TEXT");
+      shaObj.setHMACKey(process.env.SECRET_KEY, "TEXT");
+      shaObj.update(user.password);
+      user.password = shaObj.getHMAC("HEX");
+
       client.query('INSERT INTO users (email_address, password, created_at, updated_at) VALUES ($1, $2, now(), now()) RETURNING id', [user.emailAddress, user.password], function(err, result) {
         done();
         if (err) {
@@ -45,6 +50,12 @@ module.exports = {
   },
 
   authenticate: function(authEmail, authPassword, cb) {
+
+    var shaObj = new jsSHA("SHA-1", "TEXT");
+    shaObj.setHMACKey(process.env.SECRET_KEY, "TEXT");
+    shaObj.update(authPassword);
+    authPassword = shaObj.getHMAC("HEX");
+
     pg.connect(conString, function(err, client, done) {
       if (err) {
         console.log(err);
