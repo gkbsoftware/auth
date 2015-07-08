@@ -4,15 +4,33 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var routes = require('./routes/index');
 
 var app = express();
+
+// add mailtrap START
+var mailer = require('express-mailer');
+
+var mailtrap = {
+  from: 'help@example.com',
+  host: "mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "38931c53aa2d4bdab",
+    pass: "2b5015c2c9523a"
+ }
+}
+
+mailer.extend(app, mailtrap)
+// add mailtrap END
+
+
 
 // view engine setup
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
+app.engine('ejs', require('ejs').renderFile);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -54,5 +72,7 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
 
 module.exports = app;

@@ -59,13 +59,13 @@ router.get('/log_in', function(req, res) {
 });
 
 router.post('/log_in', function(req, res) {
-  users.authenticate(req.body.emailAddress, req.body.password, function(isTrue, user) {
-    if (isTrue) {
+  users.authenticate(req.body.emailAddress, req.body.password, function(user) {
+    if (user) {
       res.cookie('userId', user.id, { signed: true });
       res.redirect('/')
     }
     else {
-      res.render('log_in')
+      res.render('log_in', { err: 'invalid username/password combination.' })
     }
   });
 });
@@ -75,6 +75,23 @@ router.get('/log_out', function(req, res) {
   res.redirect('/');
 });
 
+router.get('/forgot_password', function(req, res) {
+  res.render('forgot_password');
+});
 
+router.post('/forgot_password', function (req, res, next) {
+//   // req.app.mailer.send('email', {
+//   //   to: 'example@example.com', // REQUIRED. This can be a comma delimited string just like a normal email to field.
+//   //   subject: 'Test Email', // REQUIRED.
+//   //   otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables.
+//   // }, function (err) {
+//   //   if (err) {
+//   //     // handle error
+//   //     console.log(err);
+//   //     res.send('There was an error sending the email');
+//   //     return;
+//   //   }
+    res.send('Email Sent');
+});
 
 module.exports = router;

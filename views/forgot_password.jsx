@@ -1,38 +1,42 @@
 var React = require('react');
 var Layout = require('./layout');
 
-var LoginForm = React.createClass({
-
-
+var ErrorMessage = React.createClass({
   render: function() {
-    return(
+    return <div className="alert alert-danger" role="alert">{this.props.message}</div>;
+  }
+});
+
+var ForgotPassword = React.createClass({
+  render: function() {
+    var errorMessage;
+
+    if(this.props.error) {
+      errorMessage = <ErrorMessage message={this.props.error} />;
+    }
+
+    return (
       <Layout>
-        {this.props.err}
         <div className="container">
           <div className="panel panel-default">
             <div className="panel-heading">
-              <h3 className="panel-title">Login</h3>
+              <h3 className="panel-title">Forgot Password</h3>
             </div>
             <div className="panel-body">
-              <form method="post" action="/log_in">
+              <form method="post" action="/forgot_password">
+                {errorMessage}
                 <div className="form-group">
                   <label for="email">Email address</label>
                   <input type="email" className="form-control" id="email" placeholder="Email" name="emailAddress" value={this.props.emailAddress} />
                 </div>
-                <div className="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" className="form-control" id="password" placeholder="Password" name="password" />
-                </div>
-                <button type="submit" className="btn btn-success">Login</button>
-                <br/>
+                <button type="submit" className="btn btn-success">Send me my password</button>
               </form>
-              <a href="/forgot_password">Forgot your password?</a>
             </div>
           </div>
         </div>
       </Layout>
-    )
+    );
   }
-})
+});
 
-module.exports = LoginForm;
+module.exports = ForgotPassword;

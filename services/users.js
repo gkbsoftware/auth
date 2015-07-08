@@ -62,9 +62,8 @@ module.exports = {
         throw(err);
       }
 
-      client.query('SELECT * FROM users WHERE email_address = $1', [authEmail], function(err, result) {
-        var isTrue = false;
-        var user = {};
+      client.query('SELECT id, password FROM users WHERE email_address = $1', [authEmail], function(err, result) {
+        var user = null;
 
         done();
         if (err) {
@@ -75,8 +74,7 @@ module.exports = {
          if (result.rows[0]) {
            if  (authPassword == result.rows[0].password) {
              console.log("successfully allow login");
-             user.id = result.rows[0].id;
-             isTrue = true;
+             user = result.rows[0];
            }
            else {
              console.log('Password does not match');
@@ -86,7 +84,7 @@ module.exports = {
            console.log('User with this email does not exist');
          }
 
-         cb(isTrue, user);
+         cb(user);
       });
     });
   }
